@@ -1,0 +1,6 @@
+.git* text eol=lf
+*.py text eol=lf
+*.cfg text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+*.in text eol=lf
