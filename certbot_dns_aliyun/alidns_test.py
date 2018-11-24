@@ -7,7 +7,7 @@ import alidns
 
 ACCESS_KEY = '123'
 ACCESS_KEY_SECRET = 'bar'
-DOMAIN_NAME = 'example.com'
+DOMAIN_NAME = 'foo.bar.example.com'
 
 class AliDNSClientTest(unittest.TestCase):
 
@@ -18,10 +18,10 @@ class AliDNSClientTest(unittest.TestCase):
         self._client = alidns.AliDNSClient(ACCESS_KEY, ACCESS_KEY_SECRET)
 
     def test_add_txt_record(self):
-        self._client.add_txt_record(DOMAIN_NAME, 'test.foobar.' + DOMAIN_NAME, 'test')
+        self._client.add_txt_record(DOMAIN_NAME, 'test.' + DOMAIN_NAME, 'test')
 
     def test_del_txt_record(self):
-        self._client.del_txt_record(DOMAIN_NAME, 'test.foobar.' + DOMAIN_NAME, 'test')
+        self._client.del_txt_record(DOMAIN_NAME, 'test.' + DOMAIN_NAME, 'test')
 
 if __name__ == "__main__":
     unittest.main()  # pragma: no cover

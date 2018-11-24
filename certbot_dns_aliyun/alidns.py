@@ -12,13 +12,14 @@ except:
 
 import requests
 from certbot import errors
+from certbot.plugins import dns_common
 
 API_ENDPOINT = 'https://alidns.aliyuncs.com/'
 
 class AliError(Exception):
     def __init__(self, message, code, request_id):
         # Call the base class constructor with the parameters it needs
-        super(AliError, self).__init__(message)
+        super(AliError, self).__init__(message.rstrip('.'))
 
         # Aliyun code...
         self.Code = code
@@ -38,16 +39,36 @@ class AliDNSClient():
         self._access_key_secret = access_key_secret
         self._ttl = ttl
 
-    def get_domain_records(self, domain,
-                           rr_keyword = '', type_keyword = '', value_keyword = ''):
-        return self._request('DescribeDomainRecords', {
-            'DomainName': domain,
-            'RRKeyWord': rr_keyword,
-            'TypeKeyWord': type_keyword,
-            'ValueKeyWord': value_keyword,
-        })
+    def _find_domain_id(self, domain):
+        domain_name_guesses = dns_common.base_domain_name_guesses(domain)
 
-    def add_txt_record(self, domain, rr, value):
+        for domain_name in domain_name_guesses:
+            r = self._request('DescribeDomains', {
+                'KeyWord': domain_name,
+            })
+            for d in r['Domains']['Domain']:
+                if d['DomainName'] == domain_name:
+                    return domain_name
+
+        raise errors.PluginError('Unable to determine zone identifier for {0} using zone names: {1}'
+                                 .format(domain, domain_name_guesses))
+
+    def _find_domain_record_id(self, domain, rr = '', typ = '', value = ''):
+        records = self._request('DescribeDomainRecords', {
+            'DomainName': domain,
+            'RRKeyWord': rr,
+            'TypeKeyWord': typ,
+            'ValueKeyWord': value,
+        })
+        for record in records['DomainRecords']['Record']:
+            if record['RR'] == rr:
+                return record['RecordId']
+        raise errors.PluginError('Unexpected error determining record identifier for {0}: {1}'
+                                 .format(rr, 'record not found'))
+
+    def add_txt_record(self, domain, record_name, value):
+        domain = self._find_domain_id(domain)
+        rr = record_name[:record_name.rindex('.' + domain)]
         self._request('AddDomainRecord', {
             'DomainName': domain,
             'RR': rr,
@@ -56,18 +77,14 @@ class AliDNSClient():
             'TTL': self._ttl,
         })
 
-    def del_txt_record(self, domain, rr, value):
-        records = self.get_domain_records(domain, rr_keyword=rr, type_keyword='TXT')
-        record_id = ''
-        for record in records['DomainRecords']['Record']:
-            if record['RR'] == rr:
-                record_id = record['RecordId']
-                break
-        if record_id:
-            self._request('DeleteDomainRecord', {
-                'DomainName': domain,
-                'RecordId': record_id,
-            })
+    def del_txt_record(self, domain, record_name, value):
+        domain = self._find_domain_id(domain)
+        rr = record_name[:record_name.rindex('.' + domain)]
+        record_id = self._find_domain_record_id(domain, rr=rr, typ='TXT')
+        self._request('DeleteDomainRecord', {
+            'DomainName': domain,
+            'RecordId': record_id,
+        })
 
     def _urlencode(self, s):
         s = quote_plus(s)
