@@ -6,6 +6,8 @@ A certbot dns plugin to obtain certificates using aliyun.
 ## Obtain Aliyun RAM AccessKey
 [https://ram.console.aliyun.com/](https://ram.console.aliyun.com/)
 
+And ensure your RAM account has `AliyunDNSFullAccess` permission.
+
 
 ## Install
 
