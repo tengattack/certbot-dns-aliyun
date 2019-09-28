@@ -2,12 +2,18 @@
 import logging
 
 import zope.interface
-import alidns
 
 from certbot import errors
 from certbot import interfaces
 from certbot.plugins import dns_common
 from certbot.plugins import dns_common_lexicon
+
+try:
+    # Python 3.x
+    from .alidns import AliDNSClient
+except:
+    # Python 2.x
+    from alidns import AliDNSClient
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +60,7 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     def _get_alidns_client(self):
         if not self._alidns_client:
-            self._alidns_client = alidns.AliDNSClient(
+            self._alidns_client = AliDNSClient(
                 self.credentials.conf('access-key'),
                 self.credentials.conf('access-key-secret'),
                 self.ttl)

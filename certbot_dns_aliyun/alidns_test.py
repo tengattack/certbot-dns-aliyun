@@ -3,7 +3,10 @@
 import os
 import unittest
 
-import alidns
+try:
+    from .alidns import AliDNSClient
+except:
+    from alidns import AliDNSClient
 
 ACCESS_KEY = '123'
 ACCESS_KEY_SECRET = 'bar'
@@ -15,7 +18,7 @@ class AliDNSClientTest(unittest.TestCase):
 
     def setUp(self):
         super(AliDNSClientTest, self).setUp()
-        self._client = alidns.AliDNSClient(ACCESS_KEY, ACCESS_KEY_SECRET)
+        self._client = AliDNSClient(ACCESS_KEY, ACCESS_KEY_SECRET)
 
     def test_add_txt_record(self):
         self._client.add_txt_record(DOMAIN_NAME, 'test.' + DOMAIN_NAME, 'test')
