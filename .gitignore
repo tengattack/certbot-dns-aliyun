@@ -2,3 +2,6 @@
 .vs
 *.pyc
 *.ini
+build/
+dist/
+certbot_dns_aliyun.egg-info/
