@@ -4,3 +4,4 @@
 *.txt text eol=lf
 *.rst text eol=lf
 *.in text eol=lf
+*.yaml text eol=lf
