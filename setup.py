@@ -4,14 +4,14 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-version = '0.38.1'
+version = '0.38.2'
 
 # Remember to update local-oldest-requirements.txt when changing the minimum
 # acme/certbot version.
 install_requires = [
     'acme>=0.21.1',
     'certbot>=0.21.1',
-    'dns-lexicon',
+    'dns-lexicon>=3.7.1',
     'mock',
     'setuptools',
     'zope.interface',

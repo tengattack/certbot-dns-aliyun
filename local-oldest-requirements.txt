@@ -1,2 +1,3 @@
 acme[dev]==0.21.1
 certbot[dev]==0.21.1
+dns-lexicon[dev]==3.7.1
