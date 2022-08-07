@@ -14,6 +14,8 @@ Edit the two configuration files:
 * ./credentails/aliyun.ini
 * ./letsencrypt/cli.ini
 
+Then you can execute these scripts.
+
 ```shell
 # Build the contailer locally.
 ./build.sh
@@ -24,3 +26,5 @@ Edit the two configuration files:
 # Setup the certbot manually for the first time.
 ./run.sh
 ```
+
+Now you are set with automatic renewal!
