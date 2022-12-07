@@ -5,6 +5,7 @@ set -x
 service nginx stop
 
 docker run -ti --rm \
+    -v /var/log/letsencrypt:/var/log/letsencrypt \
     -v $(pwd)/credentials:/root/.secrets \
     -v $(pwd)/letsencrypt:/etc/letsencrypt \
     -v $(pwd)/nginx:/etc/nginx/conf.d \
