@@ -2,8 +2,6 @@
 
 set -x
 
-service nginx stop
-
 docker run -ti --rm \
     -v /var/log/letsencrypt:/var/log/letsencrypt \
     -v $(pwd)/credentials:/root/.secrets \
@@ -12,6 +10,9 @@ docker run -ti --rm \
     certbot/dns-aliyun \
     renew -q
 
-service nginx start
-
-service nginx status
+STATUS="$(systemctl is-active nginx.service)"
+if [ "${STATUS}" = "active" ]; then
+    nginx -s reload
+else
+    service nginx start
+fi
