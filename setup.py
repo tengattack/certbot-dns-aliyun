@@ -14,7 +14,6 @@ install_requires = [
     'dns-lexicon>=3.7.1',
     'mock',
     'setuptools',
-    'zope.interface',
 ]
 
 docs_extras = [
