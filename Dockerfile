@@ -1,4 +1,4 @@
-FROM certbot/certbot:v1.29.0
+FROM certbot/certbot:v2.3.0
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
         apk update && apk add nginx && mkdir -p /var/run/nginx
