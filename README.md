@@ -54,8 +54,8 @@ chmod 600 /path/to/credentials.ini
 
 ```bash
 certbot certonly \
-    --authenticator = dns-aliyun \
-    --dns-aliyun-credentials = '/path/to/credentials.ini' \
+    --authenticator=dns-aliyun \
+    --dns-aliyun-credentials='/path/to/credentials.ini' \
     -d "*.example.com,example.com"
 ```
 
